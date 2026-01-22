@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Easy2Job</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f4f4f4;
+}
+
+.header {
+    background: #2c3e50;
+    color: white;
+    padding: 20px;
+    text-align: center;
+}
+
+.nav {
+    background: #34495e;
+    text-align: center;
+}
+
+.nav a {
+    color: white;
+    padding: 14px 20px;
+    display: inline-block;
+    text-decoration: none;
+}
+
+.nav a:hover {
+    background: #2c3e50;
+}
+
+.section {
+    display: none;
+    padding: 20px;
+    max-width: 800px;
+    margin: auto;
+    background: white;
+    margin-top: 20px;
+}
+
+.section.active {
+    display: block;
+}
+
+.job-card {
+    border: 1px solid #ccc;
+    padding: 15px;
+    margin-bottom: 10px;
+}
+
+form input, form textarea {
+    width: 100%;
+    padding: 10px;
+    margin: 8px 0;
+}
+
+form button {
+    padding: 10px;
+    width: 100%;
+    background: #2c3e50;
+    color: white;
+    border: none;
+}
+
+.footer {
+    background: #2c3e50;
+    color: white;
+    text-align: center;
+    padding: 10px;
+    margin-top: 20px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+    <h1>Easy2Job</h1>
+    <p>Find jobs based on your skills</p>
+</div>
+
+<div class="nav">
+    <a href="#" onclick="showSection('home')">Home</a>
+    <a href="#" onclick="showSection('jobs')">Jobs</a>
+    <a href="#" onclick="showSection('login')">Login</a>
+    <a href="#" onclick="showSection('signup')">Signup</a>
+    <a href="#" onclick="showSection('contact')">Contact</a>
+</div>
+
+<!-- HOME -->
+<div id="home" class="section active">
+    <h2>Available Jobs</h2>
+
+    <div class="job-card">
+        <h3>Frontend Developer</h3>
+        <p>Skills: HTML, CSS</p>
+        <p>Location: Remote</p>
+    </div>
+
+    <div class="job-card">
+        <h3>Java Developer</h3>
+        <p>Skills: Java</p>
+        <p>Location: Bangalore</p>
+    </div>
+</div>
+
+<!-- JOBS -->
+<div id="jobs" class="section">
+    <h2>Job Categories</h2>
+
+    <h3>Web Development</h3>
+    <ul>
+        <li>HTML Developer</li>
+        <li>CSS Designer</li>
+    </ul>
+
+    <h3>Programming</h3>
+    <ul>
+        <li>Java Developer</li>
+        <li>Python Developer</li>
+    </ul>
+</div>
+
+<!-- LOGIN -->
+<div id="login" class="section">
+    <h2>Login</h2>
+
+    <form>
+        <input type="email" placeholder="Email" required>
+        <input type="password" placeholder="Password" required>
+        <button type="submit">Login</button>
+    </form>
+</div>
+
+<!-- SIGNUP -->
+<div id="signup" class="section">
+    <h2>Create Account</h2>
+
+    <form>
+        <input type="text" placeholder="Full Name" required>
+        <input type="email" placeholder="Email" required>
+        <input type="password" placeholder="Password" required>
+        <button type="submit">Signup</button>
+    </form>
+</div>
+
+<!-- CONTACT -->
+<div id="contact" class="section">
+    <h2>Contact Us</h2>
+
+    <form>
+        <input type="text" placeholder="Your Name" required>
+        <input type="email" placeholder="Your Email" required>
+        <textarea placeholder="Message"></textarea>
+        <button type="submit">Send</button>
+    </form>
+</div>
+
+<div class="footer">
+    <p>© 2026 Easy2Job</p>
+</div>
+
+<script>
+function showSection(id) {
+    let sections = document.querySelectorAll('.section');
+    sections.forEach(section => section.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+}
+</script>
+
+</body>
+</html>
