@@ -1,62 +1,145 @@
-console.log(companyName);
-var companyName = "Easy2Job";
+let jobs = JSON.parse(localStorage.getItem("jobs")) || [];
+let editIndex = null;
 
-const jobs = [
-    { title: "HTML Developer", salary: 15000 },
-    { title: "Java Developer", salary: 30000 },
-    { title: "Python Developer", salary: 28000 }
-];
-
-const titles = jobs.map(function(job) {
-    return job.title;
-});
-console.log("Job Titles:", titles);
-
-const highSalary = jobs.filter(function(job) {
-    return job.salary > 20000;
-});
-console.log("High Salary Jobs:", highSalary);
-
-function applyJob() {
-    return new Promise(function(resolve, reject) {
-        let success = true;
-
-        setTimeout(function() {
-            if (success) {
-                resolve("Job Applied Successfully");
-            } else {
-                reject("Application Failed");
-            }
-        }, 2000);
-    });
-}
-
-applyJob()
-    .then(function(result) {
-        console.log(result);
-    })
-    .catch(function(error) {
-        console.log(error);
-    });
-
-async function applyWithAsync() {
-    try {
-        let result = await applyJob();
-        console.log("Using Async/Await:", result);
-    } catch (error) {
-        console.log(error);
-    }
-}
-
-applyWithAsync();
-
-const user = {
-    name: "Sachin",
-    greet: function(city) {
-        console.log("Hello " + this.name + " from " + city);
-    }
+window.onload = function () {
+    displayJobs();
+    initTheme();
 };
 
-const anotherUser = { name: "Saksham" };
+// SECTION SWITCH
+function showSection(id) {
+    document.querySelectorAll(".section").forEach(sec => {
+        sec.classList.remove("active");
+    });
+    document.getElementById(id).classList.add("active");
+}
 
-user.greet.call(anotherUser, "Chandigarh");
+// LOGIN
+function login() {
+    let user = document.getElementById("username").value;
+    let pass = document.getElementById("password").value;
+
+    if (user && pass) {
+        alert("Login Successful");
+        showSection("dashboard");
+    } else {
+        alert("Enter valid credentials");
+    }
+}
+
+// ADD OR UPDATE JOB
+function addOrUpdateJob() {
+    let title = document.getElementById("jobTitle").value.trim();
+    let company = document.getElementById("companyName").value.trim();
+
+    if (!title || !company) {
+        alert("Please fill all fields");
+        return;
+    }
+
+    if (editIndex === null) {
+        jobs.push({ title, company });
+    } else {
+        jobs[editIndex] = { title, company };
+        editIndex = null;
+    }
+
+    localStorage.setItem("jobs", JSON.stringify(jobs));
+    displayJobs();
+
+    document.getElementById("jobTitle").value = "";
+    document.getElementById("companyName").value = "";
+}
+
+// DISPLAY JOBS
+function displayJobs() {
+    let homeList = document.getElementById("jobList");
+    let dashList = document.getElementById("dashboardJobs");
+
+    homeList.innerHTML = "";
+    dashList.innerHTML = "";
+
+    jobs.forEach((job, index) => {
+        let card = document.createElement("div");
+        card.className = "job-card";
+
+        card.innerHTML = `
+            <h3>${job.title}</h3>
+            <p>${job.company}</p>
+            <button class="update-btn" onclick="editJob(${index})">Update</button>
+            <button class="delete-btn" onclick="deleteJob(${index})">Delete</button>
+        `;
+
+        homeList.appendChild(card.cloneNode(true));
+        dashList.appendChild(card);
+    });
+}
+
+// DELETE
+function deleteJob(index) {
+    jobs.splice(index, 1);
+    localStorage.setItem("jobs", JSON.stringify(jobs));
+    displayJobs();
+}
+
+// EDIT
+function editJob(index) {
+    document.getElementById("jobTitle").value = jobs[index].title;
+    document.getElementById("companyName").value = jobs[index].company;
+    showSection("dashboard");
+    editIndex = index;
+}
+
+// SEARCH FUNCTION
+function searchJobs() {
+    let input = document.getElementById("searchInput").value.toLowerCase();
+    let cards = document.querySelectorAll("#jobList .job-card");
+
+    cards.forEach(card => {
+        let text = card.innerText.toLowerCase();
+        card.style.display = text.includes(input) ? "block" : "none";
+    });
+}
+
+// CLEAR SEARCH
+function clearSearch() {
+    document.getElementById("searchInput").value = "";
+    searchJobs();
+}
+
+// RESUME UPLOAD
+function uploadResume() {
+    let file = document.getElementById("resume").files[0];
+    if (file) {
+        alert("Resume Uploaded: " + file.name);
+    } else {
+        alert("Please select a file");
+    }
+}
+
+// THEME TOGGLE
+function toggleTheme() {
+    document.body.classList.toggle('dark-theme');
+    updateThemeIcon();
+    // remember preference
+    localStorage.setItem('theme', document.body.classList.contains('dark-theme') ? 'dark' : 'light');
+}
+
+function updateThemeIcon() {
+    const btn = document.getElementById('themeToggle');
+    if (document.body.classList.contains('dark-theme')) {
+        btn.textContent = '☀️';
+        btn.title = 'Switch to light theme';
+    } else {
+        btn.textContent = '🌙';
+        btn.title = 'Switch to dark theme';
+    }
+}
+
+function initTheme() {
+    const saved = localStorage.getItem('theme');
+    if (saved === 'dark') {
+        document.body.classList.add('dark-theme');
+    }
+    updateThemeIcon();
+}
